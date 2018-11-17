@@ -21,6 +21,7 @@ function RunBat(file) {
         console.log("child process exit\uFF1A" + code);
     });
 }
+exports.RunBat = RunBat;
 function main() {
     var argv = process.argv;
     if (argv.length > 2) {
@@ -29,4 +30,5 @@ function main() {
 }
 main();
 //node dist/myjs.shell.js "e:/1.bat"
+//单例
 //# sourceMappingURL=myjs.shell.js.map

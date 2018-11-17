@@ -1,6 +1,6 @@
 import { spawn } from 'child_process';
 import * as  path from 'path';
-function RunBat(file: string) {
+export function RunBat(file: string) {
 	const bat = spawn('cmd.exe', ['/c', file], { cwd: path.dirname(file) });
 	bat.stdout.on('data', (data) => {
 		console.log(data.toString());
@@ -23,3 +23,4 @@ function main(){
 }
 main();
 //node dist/myjs.shell.js "e:/1.bat"
+//单例
