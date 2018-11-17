@@ -19,20 +19,18 @@ function FormatByRegExp(src, regExp, dest) {
     var re = new RegExp(regExp, "g");
     FormatFile(src, function (content) {
         var results = content.match(re);
-        if (results != null) {
-            var str = "";
-            for (var i = 0; i < results.length; i++) {
-                str = str.concat(results[i]);
-            }
-            return str;
-        }
-        return content;
+        return results ? results.join('') : content;
     }, dest);
 }
-function test() {
+function main() {
     var argv = process.argv;
-    FormatByRegExp(argv[2], argv[3], argv[4]);
-    //FormatByRegExp("e:/1.txt","module (A1|B1){[\s\S]*?\n}","e:/2.txt")
+    if (argv.length > 4) {
+        FormatByRegExp(argv[2], argv[3], argv[4]);
+    }
+    else if (argv.length > 3) {
+        FormatByRegExp(argv[2], argv[3]);
+    }
 }
-test();
-//# sourceMappingURL=myjs.file.js.map
+main();
+//node dist/myjs.formatfile.js  e:/1.txt "module (A1|B1){[\s\S]*?\n}[\r\n]*" e:/2.txt
+//# sourceMappingURL=myjs.formatfile.js.map
