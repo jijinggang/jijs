@@ -13,22 +13,30 @@ function FormatFile(src, formatFunc, dest) {
     }
     fs_1.default.writeFileSync(dest, newContent);
 }
-function FormatByRegExp(src, regExp, dest) {
+function ReturnFileByRegExp(src, regExp, dest) {
     if (dest === void 0) { dest = src; }
-    var argv = process.argv;
-    var re = new RegExp(regExp, "g");
+    var re = new RegExp(regExp, "mg");
     FormatFile(src, function (content) {
         var results = content.match(re);
         return results ? results.join('') : content;
     }, dest);
 }
+exports.ReturnFileByRegExp = ReturnFileByRegExp;
+function ReplaceFileByRegExp(src, regExp, replaceValue, dest) {
+    if (dest === void 0) { dest = src; }
+    var re = new RegExp(regExp, "mg");
+    FormatFile(src, function (content) {
+        return content.replace(re, replaceValue);
+    }, dest);
+}
+exports.ReplaceFileByRegExp = ReplaceFileByRegExp;
 function main() {
     var argv = process.argv;
-    if (argv.length > 4) {
-        FormatByRegExp(argv[2], argv[3], argv[4]);
+    if (argv.length > 5) {
+        ReplaceFileByRegExp(argv[2], argv[3], argv[4], argv[5]);
     }
-    else if (argv.length > 3) {
-        FormatByRegExp(argv[2], argv[3]);
+    else if (argv.length > 4) {
+        ReplaceFileByRegExp(argv[2], argv[3], argv[4]);
     }
 }
 main();

@@ -9,21 +9,26 @@ function FormatFile(src: string, formatFunc: FormatFunc, dest: string = src) {
     fs.writeFileSync(dest, newContent);
 }
 
-function FormatByRegExp(src: string, regExp: string, dest = src) {
-    let argv = process.argv;
-    let re = new RegExp(regExp, "g");
+export function ReturnFileByRegExp(src: string, regExp: string, dest = src) {
+    let re = new RegExp(regExp, "mg");
     FormatFile(src, function (content: string) {
         let results = content.match(re)
         return results ? results.join('') : content;
     }, dest)
 }
 
+export function ReplaceFileByRegExp(src: string, regExp: string, replaceValue: string, dest = src) {
+    let re = new RegExp(regExp, "mg");
+    FormatFile(src, function (content: string) {
+        return content.replace(re, replaceValue);
+    }, dest)
+}
 function main() {
     let argv = process.argv;
-    if (argv.length > 4) {
-        FormatByRegExp(argv[2], argv[3], argv[4]);
-    } else if (argv.length > 3) {
-        FormatByRegExp(argv[2], argv[3]);
+    if (argv.length > 5) {
+        ReplaceFileByRegExp(argv[2], argv[3], argv[4], argv[5]);
+    } else if (argv.length > 4) {
+        ReplaceFileByRegExp(argv[2], argv[3], argv[4]);
     }
 }
 main();
