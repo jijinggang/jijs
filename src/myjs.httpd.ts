@@ -92,6 +92,6 @@ function main() {
         port = parseInt(argv[3]);
     new Httpd(dir, port).Start();
 }
-main()
+//main()
 //node dist/myjs.httpd.js . 80
 //模板

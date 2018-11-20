@@ -1,6 +1,6 @@
 import fs from 'fs';
 export type FormatFunc = (content: string) => string;
-function FormatFile(src: string, formatFunc: FormatFunc, dest: string = src) {
+export function FormatFile(src: string, formatFunc: FormatFunc, dest: string = src) {
     let content: string = fs.readFileSync(src).toString();
     let newContent = formatFunc(content);
     if (src == dest && newContent == content) {
@@ -9,11 +9,11 @@ function FormatFile(src: string, formatFunc: FormatFunc, dest: string = src) {
     fs.writeFileSync(dest, newContent);
 }
 
-export function RemainFileByRegExp(src: string, regExp: string, dest = src) {
+export function RemainFileByRegExp(src: string, regExp: string,separatorChars:string="\n", dest = src) {
     let re = new RegExp(regExp, "mg");
     FormatFile(src, function (content: string) {
         let results = content.match(re)
-        return results ? results.join('') : content;
+        return results ? results.join(separatorChars) : content;
     }, dest)
 }
 
@@ -31,5 +31,5 @@ function main() {
         ReplaceFileByRegExp(argv[2], argv[3], argv[4]);
     }
 }
-main();
-//node dist/myjs.formatfile.js  e:/1.txt "module (A1|B1){[\s\S]*?\n}[\r\n]*" e:/2.txt
+//main();
+//RemainFileByRegExp("e:/1.txt","^module (A1|B1){[\\s\\S]*?^}$" ,"e:/2.txt");

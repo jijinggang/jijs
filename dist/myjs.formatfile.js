@@ -13,12 +13,14 @@ function FormatFile(src, formatFunc, dest) {
     }
     fs_1.default.writeFileSync(dest, newContent);
 }
-function RemainFileByRegExp(src, regExp, dest) {
+exports.FormatFile = FormatFile;
+function RemainFileByRegExp(src, regExp, separatorChars, dest) {
+    if (separatorChars === void 0) { separatorChars = "\n"; }
     if (dest === void 0) { dest = src; }
     var re = new RegExp(regExp, "mg");
     FormatFile(src, function (content) {
         var results = content.match(re);
-        return results ? results.join('') : content;
+        return results ? results.join(separatorChars) : content;
     }, dest);
 }
 exports.RemainFileByRegExp = RemainFileByRegExp;
@@ -39,6 +41,6 @@ function main() {
         ReplaceFileByRegExp(argv[2], argv[3], argv[4]);
     }
 }
-main();
-//node dist/myjs.formatfile.js  e:/1.txt "module (A1|B1){[\s\S]*?\n}[\r\n]*" e:/2.txt
+//main();
+//RemainFileByRegExp("e:/1.txt","^module (A1|B1){[\\s\\S]*?^}$" ,"e:/2.txt");
 //# sourceMappingURL=myjs.formatfile.js.map

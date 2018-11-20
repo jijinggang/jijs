@@ -21,6 +21,6 @@ function main(){
 		RunBat(argv[2]);		
 	}
 }
-main();
+//main();
 //node dist/myjs.shell.js "e:/1.bat"
 //单例
