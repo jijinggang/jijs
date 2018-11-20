@@ -13,7 +13,7 @@ function FormatFile(src, formatFunc, dest) {
     }
     fs_1.default.writeFileSync(dest, newContent);
 }
-function ReturnFileByRegExp(src, regExp, dest) {
+function RemainFileByRegExp(src, regExp, dest) {
     if (dest === void 0) { dest = src; }
     var re = new RegExp(regExp, "mg");
     FormatFile(src, function (content) {
@@ -21,7 +21,7 @@ function ReturnFileByRegExp(src, regExp, dest) {
         return results ? results.join('') : content;
     }, dest);
 }
-exports.ReturnFileByRegExp = ReturnFileByRegExp;
+exports.RemainFileByRegExp = RemainFileByRegExp;
 function ReplaceFileByRegExp(src, regExp, replaceValue, dest) {
     if (dest === void 0) { dest = src; }
     var re = new RegExp(regExp, "mg");

@@ -9,7 +9,7 @@ function FormatFile(src: string, formatFunc: FormatFunc, dest: string = src) {
     fs.writeFileSync(dest, newContent);
 }
 
-export function ReturnFileByRegExp(src: string, regExp: string, dest = src) {
+export function RemainFileByRegExp(src: string, regExp: string, dest = src) {
     let re = new RegExp(regExp, "mg");
     FormatFile(src, function (content: string) {
         let results = content.match(re)
