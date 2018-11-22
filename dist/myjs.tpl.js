@@ -52,5 +52,5 @@ function test() {
     var tpl = new LiteTmplate(TPL_SAMPLE);
     console.log(tpl.Deal({ files: [{ name: "1.txt", size: 100 }, { name: "2.txt", size: 23 }] }));
 }
-//test();
+exports.test = test;
 //# sourceMappingURL=myjs.tpl.js.map

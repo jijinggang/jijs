@@ -52,7 +52,7 @@ export class LiteTmplate {
     }
 }
 
-function test() {
+export function test() {
     const TPL_SAMPLE = `
 <html>
 <% for(file of data.files){ %>
@@ -66,5 +66,3 @@ function test() {
     let tpl = new LiteTmplate(TPL_SAMPLE);
     console.log(tpl.Deal({ files: [{ name: "1.txt", size: 100 }, { name: "2.txt", size: 23 }] }));
 }
-
-//test();

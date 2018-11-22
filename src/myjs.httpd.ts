@@ -95,3 +95,7 @@ function main() {
 //main()
 //node dist/myjs.httpd.js . 80
 //模板
+
+export function test(){
+    new Httpd().Start();
+}

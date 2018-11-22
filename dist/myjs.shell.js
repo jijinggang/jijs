@@ -28,6 +28,10 @@ function main() {
         RunBat(argv[2]);
     }
 }
+function test() {
+    RunBat("ping 127.0.0.1");
+}
+exports.test = test;
 //main();
 //node dist/myjs.shell.js "e:/1.bat"
 //单例

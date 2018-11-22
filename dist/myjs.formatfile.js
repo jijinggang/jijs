@@ -41,6 +41,9 @@ function main() {
         ReplaceFileByRegExp(argv[2], argv[3], argv[4]);
     }
 }
+function test() {
+}
+exports.test = test;
 //main();
 //RemainFileByRegExp("e:/1.txt","^module (A1|B1){[\\s\\S]*?^}$" ,"e:/2.txt");
 //# sourceMappingURL=myjs.formatfile.js.map

@@ -90,4 +90,8 @@ function main() {
 //main()
 //node dist/myjs.httpd.js . 80
 //模板
+function test() {
+    new Httpd().Start();
+}
+exports.test = test;
 //# sourceMappingURL=myjs.httpd.js.map
