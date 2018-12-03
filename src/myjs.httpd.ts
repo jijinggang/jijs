@@ -2,7 +2,7 @@ import * as http from 'http';
 import * as url from 'url';
 import * as path from 'path';
 import * as fs from 'fs';
-import { LiteTmplate } from './myjs.tpl';
+import { JTpl } from './myjs.tpl';
 
 const TPL_FILELIST = `
 <html>
@@ -22,11 +22,11 @@ const TPL_FILELIST = `
 export class Httpd {
     private root: string;
     private port: number;
-    private tplFilelist: LiteTmplate;
+    private tplFilelist: JTpl;
     constructor(root: string = ".", port: number = 80) {
         this.root = root;
         this.port = port;
-        this.tplFilelist = new LiteTmplate(TPL_FILELIST);
+        this.tplFilelist = new JTpl(TPL_FILELIST);
     }
 
     Start() {
@@ -92,10 +92,10 @@ function main() {
         port = parseInt(argv[3]);
     new Httpd(dir, port).Start();
 }
-//main()
-//node dist/myjs.httpd.js . 80
-//模板
 
-export function test(){
+function test(){
     new Httpd().Start();
 }
+
+//test();
+//main();

@@ -3,7 +3,7 @@ type TplFrag = {
     value: string
 }
 
-export class LiteTmplate {
+export class JTpl {
     private func: Function;
     constructor(tpl: string) {
         let lines = this.parseTpl(tpl);
@@ -52,7 +52,7 @@ export class LiteTmplate {
     }
 }
 
-export function test() {
+function test() {
     const TPL_SAMPLE = `
 <html>
 <% for(file of data.files){ %>
@@ -63,6 +63,7 @@ export function test() {
 <% } %>
 </html>
 `
-    let tpl = new LiteTmplate(TPL_SAMPLE);
+    let tpl = new JTpl(TPL_SAMPLE);
     console.log(tpl.Deal({ files: [{ name: "1.txt", size: 100 }, { name: "2.txt", size: 23 }] }));
 }
+//test();

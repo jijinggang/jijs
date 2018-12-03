@@ -56,7 +56,7 @@ export function Merge(file1 :string, file2:string, destFile:string = file1,withT
     if(withTail){
         let tail = new Int32Array(2);
         tail[0]= TAIL_TOKEN;
-        tail[1] = Size(file1);
+        tail[1] = fs.statSync(file1).size;
         fs.appendFileSync(destFile,tail);
     }
     return true;
@@ -103,19 +103,14 @@ function copyFd(fd:number, offset:number, length:number, file:string){
     fs.writeFileSync(file, buff);
 }
 
-/**
- * 获取文件的字节数大小
- * @param file 
- */
-export function Size(file:string):number{
-    return fs.statSync(file).size;
+
+function test1(){
+    Remain("e:/1.txt","^module (A1|B1){[\\s\\S]*?^}$" ,"e:/2.txt");
+}
+function test2(){
+    Merge("e:/1.txt","e:/2.txt","e:/3.m");
+    UnMerge("e:/3.m","e:/1_.txt","e:/2_.txt");
 }
 
-
-
-
-//RemainFileByRegExp("e:/1.txt","^module (A1|B1){[\\s\\S]*?^}$" ,"e:/2.txt");
-//Append("e:/1.txt","e:/2.txt","e:/3.txt");
-
-//Merge("e:/1.txt","e:/2.txt","e:/3.m");
-//UnMerge("e:/3.m","e:/1_.txt","e:/2_.txt");
+//test1();
+//test2();

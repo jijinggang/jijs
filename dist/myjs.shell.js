@@ -31,8 +31,7 @@ function main() {
 function test() {
     RunBat("ping 127.0.0.1");
 }
-exports.test = test;
 //main();
 //node dist/myjs.shell.js "e:/1.bat"
-//单例
+//test();
 //# sourceMappingURL=myjs.shell.js.map

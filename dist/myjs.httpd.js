@@ -19,7 +19,7 @@ var Httpd = /** @class */ (function () {
         if (port === void 0) { port = 80; }
         this.root = root;
         this.port = port;
-        this.tplFilelist = new myjs_tpl_1.LiteTmplate(TPL_FILELIST);
+        this.tplFilelist = new myjs_tpl_1.JTpl(TPL_FILELIST);
     }
     Httpd.prototype.Start = function () {
         var _this = this;
@@ -87,11 +87,9 @@ function main() {
         port = parseInt(argv[3]);
     new Httpd(dir, port).Start();
 }
-//main()
-//node dist/myjs.httpd.js . 80
-//模板
 function test() {
     new Httpd().Start();
 }
-exports.test = test;
+//test();
+//main();
 //# sourceMappingURL=myjs.httpd.js.map
