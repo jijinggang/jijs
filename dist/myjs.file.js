@@ -4,10 +4,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs_1 = __importDefault(require("fs"));
-function ReplaceByFunction(src, formatFunc, dest) {
+function ReadDir(path) {
+    var info = { is_dir: true, name: path, subs: [] };
+    var dirs = fs_1.default.readdirSync(path, { withFileTypes: true });
+    var subs = info.subs;
+    for (var _i = 0, dirs_1 = dirs; _i < dirs_1.length; _i++) {
+        var dir = dirs_1[_i];
+        if (dir.isDirectory()) {
+            subs.push(ReadDir(path + "/" + dir.name));
+        }
+        else if (dir.isFile()) {
+            subs.push({ is_dir: false, name: dir.name });
+        }
+    }
+    return info;
+}
+exports.ReadDir = ReadDir;
+function ReplaceByFunction(src, replaceFunc, dest) {
     if (dest === void 0) { dest = src; }
     var content = fs_1.default.readFileSync(src).toString();
-    var newContent = formatFunc(content);
+    var newContent = replaceFunc(content);
     if (src == dest && newContent == content) {
         return;
     }
@@ -121,4 +137,5 @@ function test2() {
 }
 //test1();
 //test2();
+//ReadDir('e:/docs/2018')
 //# sourceMappingURL=myjs.file.js.map

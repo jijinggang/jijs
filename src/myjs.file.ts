@@ -1,8 +1,24 @@
 import fs from 'fs';
-export type FormatFunc = (content: string) => string;
-export function ReplaceByFunction(src: string, formatFunc: FormatFunc, dest: string = src) {
+
+export function ReadDir(path:string):{is_dir:boolean,name:string,subs:any[]}{
+    let info = {is_dir:true,name:path,subs:[]};
+    let dirs: fs.Dirent[] = fs.readdirSync(path,{withFileTypes:true});
+    let subs:any[] = info.subs;
+    for(let dir of dirs){
+        if(dir.isDirectory()){
+            subs.push(ReadDir(path + "/" + dir.name));
+        }
+        else if(dir.isFile()){
+            subs.push({is_dir:false,name:dir.name});
+        }
+    }
+    return info;
+}
+
+
+export function ReplaceByFunction(src: string, replaceFunc: (content: string) => string, dest: string = src) {
     let content: string = fs.readFileSync(src).toString();
-    let newContent = formatFunc(content);
+    let newContent = replaceFunc(content);
     if (src == dest && newContent == content) {
         return;
     }
@@ -112,5 +128,7 @@ function test2(){
     UnMerge("e:/3.m","e:/1_.txt","e:/2_.txt");
 }
 
+
 //test1();
 //test2();
+//ReadDir('e:/docs/2018')
