@@ -9,17 +9,23 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var child_process_1 = require("child_process");
 var path = __importStar(require("path"));
-function RunBat(file) {
+function RunBat(file, on_data, on_error, on_exit) {
     var bat = child_process_1.spawn('cmd.exe', ['/c', file], { cwd: path.dirname(file) });
-    bat.stdout.on('data', function (data) {
-        console.log(data.toString());
-    });
-    bat.stderr.on('data', function (data) {
-        console.error(data.toString());
-    });
-    bat.on('exit', function (code) {
-        console.log("child process exit\uFF1A" + code);
-    });
+    if (on_data) {
+        bat.stdout.on('data', function (data) {
+            on_data(data.toString());
+        });
+    }
+    if (on_error) {
+        bat.stderr.on('data', function (data) {
+            on_error(data.toString());
+        });
+    }
+    if (on_exit) {
+        bat.on('exit', function (code) {
+            on_exit(code);
+        });
+    }
 }
 exports.RunBat = RunBat;
 function main() {
@@ -29,7 +35,7 @@ function main() {
     }
 }
 function test() {
-    RunBat("ping 127.0.0.1");
+    RunBat("ping 127.0.0.1", function (data) { console.log(data); }, null, function (code) { console.log("exit " + code); });
 }
 //main();
 //node dist/myjs.shell.js "e:/1.bat"
