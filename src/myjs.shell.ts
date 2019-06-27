@@ -1,8 +1,9 @@
 import { spawn } from 'child_process';
 import * as  path from 'path';
 
-export function RunBat(file: string, on_data?:((data:string)=>void ) | null , on_error?: ((data:string)=>void) | null, on_exit?: ((data:number|null)=>void) | null) {
+export function Exec(file: string, on_data?:((data:string)=>void ) | null , on_error?: ((data:string)=>void) | null, on_exit?: ((data:number|null)=>void) | null) {
 	const bat = spawn('cmd.exe', ['/c', file], { cwd: path.dirname(file) });
+	bat.stdout.setEncoding("utf8");
 	if(on_data){
 		bat.stdout.on('data', (data) => {
 			on_data(data.toString());
@@ -23,12 +24,12 @@ function main(){
 	let argv = process.argv;
 	if(argv.length > 2)
 	{
-		RunBat(argv[2]);		
+		Exec(argv[2]);		
 	}
 }
 
 function test(){
-	RunBat("ping 127.0.0.1", (data)=>{console.log(data)}, null, (code) => {console.log(`exit ${code}`)} );
+	Exec("ping 127.0.0.1", (data)=>{console.log(data)}, null, (code) => {console.log(`exit ${code}`)} );
 }
 //main();
 //node dist/myjs.shell.js "e:/1.bat"
