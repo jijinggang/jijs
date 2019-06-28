@@ -7,7 +7,7 @@ my common library
 
 ## Command
 
-- myhttpd : http server
-- mywebshell : run shell over http
+- my-httpd : http server
+- my-webshell : run shell over http
 
 
