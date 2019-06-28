@@ -1,6 +1,6 @@
 {
   "name": "jijs",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "my common javascript library",
   "main": "index.js",
   "dependencies": {
