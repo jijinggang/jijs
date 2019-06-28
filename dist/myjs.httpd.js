@@ -91,5 +91,5 @@ function test() {
     new Httpd().Start();
 }
 //test();
-//main();
+main();
 //# sourceMappingURL=myjs.httpd.js.map

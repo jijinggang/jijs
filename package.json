@@ -1,0 +1,34 @@
+{
+  "name": "myjs",
+  "version": "1.0.0",
+  "description": "my common javascript library",
+  "main": "index.js",
+  "dependencies": {
+    "@types/node": "^12.0.10",
+    "@types/ws": "^6.0.1",
+    "ws": "^7.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jijinggang/myjs.git"
+  },
+  "keywords": [
+    "httpd",
+    "webshell",
+    "httpshell"
+  ],
+  "author": "jijinggang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jijinggang/myjs/issues"
+  },
+  "homepage": "https://github.com/jijinggang/myjs#readme",
+  "bin": {
+    "myhttpd": "./dist/myjs.httpd.js",
+    "mywebshell": "./dist/myjs.httpshell.js"
+  }
+}

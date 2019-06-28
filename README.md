@@ -1,11 +1,13 @@
 # myjs
-常用的js脚本通用命令集
+my common library
 
-# 编译环境配置
+# Install
     
-## npm包安装
-    npm install --save @types/node  //支持ts代码提示
-    npm install --save ws
+    npm install myjs
 
-## 实时编译
-    tsc -p . -w
+## Command
+
+- myhttpd : http server
+- mywebshell : run shell over http
+
+
