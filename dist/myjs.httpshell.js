@@ -14,12 +14,49 @@ var fs = __importStar(require("fs"));
 var myjs_tpl_1 = require("./myjs.tpl");
 var myjs_shell_1 = require("./myjs.shell");
 var ws = __importStar(require("ws"));
-var TPL_FILELIST = "\n<html>\n<head>\n<script type=\"text/javascript\">\nvar path;\nvar ws;\nfunction run(file) {\n   console.log(file);\n   if (ws != null) {\n     ws.close();\n     ws = null;\n   }\n   var div = document.getElementById(\"msg\");\n   var host = window.location.host;\n \n   ws = new WebSocket(\"ws://\" + host + \"/exec?name=\"+file);\n   ws.binaryType =\"string\";\n   ws.onopen = function () {\n    div.innerText =  \"\";\n    //div.innerText = \"opened \" + div.innerText;\n\t//ws.send(\"ok\");\n   };\n   ws.onmessage = function (e) {\n      div.innerText = div.innerText + e.data;\n   };\n   ws.onclose = function (e) {\n     // div.innerText = div.innerText + \"closed\";\n   };\n   //div.innerText = \"init \" + div.innerText;\n};\n</script>\n</head>\n<body>\n<table border=\"0\" cellspacing=\"8\">\n<% for(let file of data){ %>\n<tr>\n    <td>{{file.name}}</td>\n    <td align=\"right\"> <button onclick='run(\"{{file.name}}\");'>Run</button></td>\n</tr>\n\n<% } %>\n</table>\n<div id=\"msg\"></div>\n\n</body>\n\n</html>\n";
+var TPL_FILELIST = "\n<html>\n<head>\n<script type=\"text/javascript\">\nvar path;\nvar ws;\nfunction run(file) {\n   if (ws != null) {\n     ws.close();\n     ws = null;\n   }\n   var div = document.getElementById(\"msg\");\n   var host = window.location.host;\n   div.innerText =  \"\"; \n   ws = new WebSocket(\"ws://\" + host + \"/exec?name=\"+file);\n   ws.binaryType =\"string\";\n   ws.onopen = function () {\n    div.innerText =  \"\"; \n    //div.innerText = \"opened \" + div.innerText;\n\t//ws.send(\"ok\");\n   };\n   ws.onmessage = function (e) {\n      div.innerText = div.innerText + e.data;\n   };\n   ws.onclose = function (e) {\n      div.innerText = div.innerText + \"closed\";\n   };\n   //div.innerText = \"init \" + div.innerText;\n};\n</script>\n</head>\n<body>\n<table border=\"0\" cellspacing=\"8\">\n<% for(let file of data){ %>\n<tr>\n    <td>{{file.name}}</td>\n    <td align=\"right\"> <button onclick='run(\"{{file.name}}\");'>Run</button></td>\n</tr>\n\n<% } %>\n</table>\n<hr>\n<div id=\"msg\"></div>\n\n</body>\n\n</html>\n";
+var Status = /** @class */ (function () {
+    function Status() {
+        this.shell = null;
+        this.outputs = [];
+    }
+    return Status;
+}());
+var _runStatus = new Map();
+function readAndSetStatus(file) {
+    var value = _runStatus.get(file);
+    if (value)
+        return value;
+    var status = new Status();
+    _runStatus.set(file, status);
+    return status;
+}
 function runShell(file, ws1) {
-    myjs_shell_1.Exec(file, function (data) {
+    var status = readAndSetStatus(file);
+    var isRunning = status.shell != null;
+    if (status.shell == null) {
+        var sh = new myjs_shell_1.Shell(file);
+        status.shell = sh;
+        sh.OnExit.add(function () {
+            status.shell = null;
+            ws1.close();
+        });
+        status.outputs = [];
+        sh.OnData.add(function (data) {
+            ws1.send(data);
+            status.outputs.push(data);
+        });
+        console.log("exec:", file);
+        sh.Exec();
+    }
+    else {
+        var data = status.outputs.join('');
+        console.log(data);
         ws1.send(data);
-    }, null, function (code) {
-    });
+        status.shell.OnData.add(function (data) {
+            ws1.send(data);
+        });
+    }
 }
 var HttpShell = /** @class */ (function () {
     function HttpShell(root, port, exts) {
@@ -64,7 +101,6 @@ var HttpShell = /** @class */ (function () {
             var file = URL.query["name"].toString();
             if (!file)
                 return;
-            console.log("ws", file);
             if (pathname === '/exec') {
                 wsServer.handleUpgrade(request, socket, head, function done(ws1) {
                     wsServer.emit('connection', ws1, request);

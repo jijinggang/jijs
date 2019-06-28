@@ -9,36 +9,59 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var child_process_1 = require("child_process");
 var path = __importStar(require("path"));
-function Exec(file, on_data, on_error, on_exit) {
-    var bat = child_process_1.spawn('cmd.exe', ['/c', file], { cwd: path.dirname(file) });
-    bat.stdout.setEncoding("utf8");
-    if (on_data) {
-        bat.stdout.on('data', function (data) {
-            on_data(data.toString());
-        });
+var os = __importStar(require("os"));
+var myjs_action_1 = require("./myjs.action");
+var Shell = /** @class */ (function () {
+    function Shell(file) {
+        this._running = false;
+        this.OnData = new myjs_action_1.Action1();
+        this.OnError = new myjs_action_1.Action1();
+        this.OnExit = new myjs_action_1.Action0();
+        this._file = file;
     }
-    if (on_error) {
-        bat.stderr.on('data', function (data) {
-            on_error(data.toString());
+    Shell.prototype.IsRunning = function () {
+        return this._running;
+    };
+    Shell.prototype.Exec = function () {
+        var _this = this;
+        this._running = true;
+        var file = this._file;
+        var program;
+        if (os.platform() == 'win32') {
+            program = child_process_1.spawn('cmd.exe', ['/c', "chcp 65001 & " + file], { cwd: path.dirname(file) });
+        }
+        else {
+            program = child_process_1.spawn(file, { cwd: path.dirname(file) });
+        }
+        program.stdout.setEncoding("utf8");
+        program.stdout.on('data', function (data) {
+            _this.OnData.invoke(data.toString());
         });
-    }
-    if (on_exit) {
-        bat.on('exit', function (code) {
-            on_exit(code);
+        program.stderr.on('data', function (data) {
+            _this.OnError.invoke(data.toString());
         });
-    }
-}
-exports.Exec = Exec;
+        program.on('exit', function (code) {
+            _this.OnExit.invoke();
+            _this.OnData.removeAll();
+            _this.OnExit.removeAll();
+            _this.OnError.removeAll();
+            _this._running = false;
+        });
+    };
+    return Shell;
+}());
+exports.Shell = Shell;
 function main() {
     var argv = process.argv;
     if (argv.length > 2) {
-        Exec(argv[2]);
+        new Shell(argv[2]).Exec();
     }
 }
 function test() {
-    Exec("ping 127.0.0.1", function (data) { console.log(data); }, null, function (code) { console.log("exit " + code); });
+    var sh = new Shell("ping 127.0.0.1");
+    sh.OnData.add(function (data) { console.log(data); });
 }
 //main();
 //node dist/myjs.shell.js "e:/1.bat"
-//test();
+test();
 //# sourceMappingURL=myjs.shell.js.map
