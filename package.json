@@ -1,6 +1,6 @@
 {
   "name": "jijs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "my common javascript library",
   "main": "index.js",
   "dependencies": {
@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/jijinggang/myjs#readme",
   "bin": {
-    "myhttpd": "./dist/myjs.httpd.js",
-    "mywebshell": "./dist/myjs.httpshell.js"
+    "my-httpd": "./dist/httpd.js",
+    "my-webshell": "./dist/webshell.js"
   }
 }

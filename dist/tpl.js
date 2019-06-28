@@ -53,4 +53,4 @@ function test() {
     console.log(tpl.Deal({ files: [{ name: "1.txt", size: 100 }, { name: "2.txt", size: 23 }] }));
 }
 //test();
-//# sourceMappingURL=myjs.tpl.js.map
+//# sourceMappingURL=tpl.js.map

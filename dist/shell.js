@@ -10,13 +10,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var child_process_1 = require("child_process");
 var path = __importStar(require("path"));
 var os = __importStar(require("os"));
-var myjs_action_1 = require("./myjs.action");
+var action_1 = require("./action");
 var Shell = /** @class */ (function () {
     function Shell(file) {
         this._running = false;
-        this.OnData = new myjs_action_1.Action1();
-        this.OnError = new myjs_action_1.Action1();
-        this.OnExit = new myjs_action_1.Action0();
+        this.OnData = new action_1.Action1();
+        this.OnError = new action_1.Action1();
+        this.OnExit = new action_1.Action0();
         this._file = file;
     }
     Shell.prototype.IsRunning = function () {
@@ -64,4 +64,4 @@ function test() {
 //main();
 //node dist/myjs.shell.js "e:/1.bat"
 test();
-//# sourceMappingURL=myjs.shell.js.map
+//# sourceMappingURL=shell.js.map

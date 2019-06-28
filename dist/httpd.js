@@ -11,7 +11,7 @@ var http = __importStar(require("http"));
 var url = __importStar(require("url"));
 var path = __importStar(require("path"));
 var fs = __importStar(require("fs"));
-var myjs_tpl_1 = require("./myjs.tpl");
+var tpl_1 = require("./tpl");
 var TPL_FILELIST = "\n<html>\n    <head></head>\n    <body>\n    <table border=\"0\" cellspacing=\"8\">\n    <% for(let file of data){ %>\n    <tr>\n        <td><a href=\"{{file.url}}\">{{file.name}}</a></td>\n        <td align=\"right\">{{file.size}} B</td>\n    </tr>\n    <% } %>\n    </body>\n</html>\n";
 var Httpd = /** @class */ (function () {
     function Httpd(root, port) {
@@ -19,7 +19,7 @@ var Httpd = /** @class */ (function () {
         if (port === void 0) { port = 80; }
         this.root = root;
         this.port = port;
-        this.tplFilelist = new myjs_tpl_1.JTpl(TPL_FILELIST);
+        this.tplFilelist = new tpl_1.JTpl(TPL_FILELIST);
     }
     Httpd.prototype.Start = function () {
         var _this = this;
@@ -92,4 +92,4 @@ function test() {
 }
 //test();
 main();
-//# sourceMappingURL=myjs.httpd.js.map
+//# sourceMappingURL=httpd.js.map

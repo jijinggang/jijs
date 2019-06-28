@@ -1,7 +1,7 @@
-import * as shell from './myjs.shell'
-import * as httpd from './myjs.httpd'
-import * as tpl from './myjs.tpl'
-import * as formatfile from "./myjs.file"
+import * as shell from './shell'
+import * as httpd from './httpd'
+import * as tpl from './tpl'
+import * as formatfile from "./file"
 
 
 function getMem(): number[] {

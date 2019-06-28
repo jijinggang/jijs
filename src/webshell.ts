@@ -2,8 +2,8 @@ import * as http from 'http';
 import * as url from 'url';
 import * as path from 'path';
 import * as fs from 'fs';
-import { JTpl } from './myjs.tpl';
-import { Shell } from "./myjs.shell"
+import { JTpl } from './tpl';
+import { Shell } from "./shell"
 import * as ws from "ws";
 
 

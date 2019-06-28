@@ -106,4 +106,4 @@ function test() {
     a.invoke("world");
 }
 test();
-//# sourceMappingURL=myjs.action.js.map
+//# sourceMappingURL=action.js.map

@@ -138,4 +138,4 @@ function test2() {
 //test1();
 //test2();
 //ReadDir('e:/docs/2018')
-//# sourceMappingURL=myjs.file.js.map
+//# sourceMappingURL=file.js.map

@@ -11,8 +11,8 @@ var http = __importStar(require("http"));
 var url = __importStar(require("url"));
 var path = __importStar(require("path"));
 var fs = __importStar(require("fs"));
-var myjs_tpl_1 = require("./myjs.tpl");
-var myjs_shell_1 = require("./myjs.shell");
+var tpl_1 = require("./tpl");
+var shell_1 = require("./shell");
 var ws = __importStar(require("ws"));
 var TPL_FILELIST = "\n<html>\n<head>\n<script type=\"text/javascript\">\nvar path;\nvar ws;\nfunction run(file) {\n   if (ws != null) {\n     ws.close();\n     ws = null;\n   }\n   var div = document.getElementById(\"msg\");\n   var host = window.location.host;\n   div.innerText =  \"\"; \n   ws = new WebSocket(\"ws://\" + host + \"/exec?name=\"+file);\n   ws.binaryType =\"string\";\n   ws.onopen = function () {\n    div.innerText =  \"\"; \n    //div.innerText = \"opened \" + div.innerText;\n\t//ws.send(\"ok\");\n   };\n   ws.onmessage = function (e) {\n      div.innerText = div.innerText + e.data;\n   };\n   ws.onclose = function (e) {\n      div.innerText = div.innerText + \"closed\";\n   };\n   //div.innerText = \"init \" + div.innerText;\n};\n</script>\n</head>\n<body>\n<table border=\"0\" cellspacing=\"8\">\n<% for(let file of data){ %>\n<tr>\n    <td>{{file.name}}</td>\n    <td align=\"right\"> <button onclick='run(\"{{file.name}}\");'>Run</button></td>\n</tr>\n\n<% } %>\n</table>\n<hr>\n<div id=\"msg\"></div>\n\n</body>\n\n</html>\n";
 var Status = /** @class */ (function () {
@@ -35,7 +35,7 @@ function runShell(file, ws1) {
     var status = readAndSetStatus(file);
     var isRunning = status.shell != null;
     if (status.shell == null) {
-        var sh = new myjs_shell_1.Shell(file);
+        var sh = new shell_1.Shell(file);
         status.shell = sh;
         sh.OnExit.add(function () {
             status.shell = null;
@@ -63,7 +63,7 @@ var HttpShell = /** @class */ (function () {
         this.root = root;
         this.port = port;
         this.exts = exts;
-        this.tplFilelist = new myjs_tpl_1.JTpl(TPL_FILELIST);
+        this.tplFilelist = new tpl_1.JTpl(TPL_FILELIST);
     }
     HttpShell.prototype.Start = function () {
         var _this = this;
@@ -155,4 +155,4 @@ function test() {
 }
 //test();
 main();
-//# sourceMappingURL=myjs.httpshell.js.map
+//# sourceMappingURL=webshell.js.map

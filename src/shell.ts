@@ -2,7 +2,7 @@ import { spawn } from 'child_process';
 import * as  path from 'path';
 import { openSync, symlinkSync } from 'fs';
 import * as os from 'os';
-import { Action1, Action0 } from './myjs.action'
+import { Action1, Action0 } from './action'
 
 export class Shell {
 	private _running = false;
