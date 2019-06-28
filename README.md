@@ -1,9 +1,9 @@
-# myjs
+# jijs
 my common library
 
 # Install
     
-    npm install myjs
+    npm install jijs
 
 ## Command
 
