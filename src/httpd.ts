@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import * as http from 'http';
 import * as url from 'url';
 import * as path from 'path';
