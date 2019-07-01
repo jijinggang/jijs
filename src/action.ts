@@ -101,4 +101,4 @@ function test(){
     a.add((msg: string) =>{console.log("hi:", msg)})
     a.invoke("world");
 }
-test();
+//test();

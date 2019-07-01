@@ -2,8 +2,39 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs_1 = __importDefault(require("fs"));
+var path = __importStar(require("path"));
+function GetFileList(dir) {
+    var filelist = [];
+    var files = fs_1.default.readdirSync(dir);
+    for (var _i = 0, files_1 = files; _i < files_1.length; _i++) {
+        var name = files_1[_i];
+        var fullname = path.join(dir, name);
+        var fi = void 0;
+        try {
+            fi = fs_1.default.statSync(fullname);
+        }
+        catch (_a) {
+            continue;
+        }
+        if (fi.isFile() || fi.isDirectory()) {
+            var url = name;
+            if (fi.isDirectory())
+                url += "/";
+            filelist.push(url);
+        }
+    }
+    return filelist;
+}
+exports.GetFileList = GetFileList;
 function ReadDir(path) {
     var info = { is_dir: true, name: path, subs: [] };
     var dirs = fs_1.default.readdirSync(path, { withFileTypes: true });

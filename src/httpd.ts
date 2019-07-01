@@ -5,6 +5,8 @@ import * as url from 'url';
 import * as path from 'path';
 import * as fs from 'fs';
 import { JTpl } from './tpl';
+import {GetFileList} from './file'
+import commander = require('commander')
 
 const TPL_FILELIST = `
 <html>
@@ -13,8 +15,7 @@ const TPL_FILELIST = `
     <table border="0" cellspacing="8">
     <% for(let file of data){ %>
     <tr>
-        <td><a href="{{file.url}}">{{file.name}}</a></td>
-        <td align="right">{{file.size}} B</td>
+        <td><a href="{{file.name}}">{{file.name}}</a></td>
     </tr>
     <% } %>
     </body>
@@ -68,31 +69,24 @@ export class Httpd {
                 fileStream.pipe(res);
             }
         }).listen(this.port);
-        console.log("starting  ", this.root, this.port);
+        console.log("httpd starting  ", this.root, this.port);
     }
     private genFilelistDatas(dir: string) {
-        let datas: object[] = [];
-        let files = fs.readdirSync(dir)
-        for (let name of files) {
-            let url = path.join(dir, name);
-            let fi = fs.statSync(url);
-            if (fi.isFile() || fi.isDirectory()) {
-                datas.push({ name: name, url: url, size: fi.size });
-            }
+        let datas = [];
+        let files = GetFileList(dir);
+        for(let file of files){
+            datas.push({ name:file});
         }
         return datas;
     }
 }
 
 function main() {
-    let argv = process.argv;
-    let dir = ".";
-    let port = 80;
-    if (argv.length > 2)
-        dir = argv[2];
-    if (argv.length > 3)
-        port = parseInt(argv[3]);
-    new Httpd(dir, port).Start();
+    let args = commander
+        .option('-r, --root [v]','http root directory','.')
+        .option('-p, --port [n]','http server\'s port', 80)
+        .parse(process.argv)
+    new Httpd(args.root, args.port).Start();
 }
 
 function test(){

@@ -1,11 +1,12 @@
 {
   "name": "jijs",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "my common javascript library",
   "main": "index.js",
   "dependencies": {
     "@types/node": "^12.0.10",
     "@types/ws": "^6.0.1",
+    "commander": "^2.20.0",
     "ws": "^7.0.1"
   },
   "devDependencies": {},

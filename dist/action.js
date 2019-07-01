@@ -105,5 +105,5 @@ function test() {
     a.add(function (msg) { console.log("hi:", msg); });
     a.invoke("world");
 }
-test();
+//test();
 //# sourceMappingURL=action.js.map

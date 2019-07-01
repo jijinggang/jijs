@@ -13,7 +13,9 @@ var url = __importStar(require("url"));
 var path = __importStar(require("path"));
 var fs = __importStar(require("fs"));
 var tpl_1 = require("./tpl");
-var TPL_FILELIST = "\n<html>\n    <head></head>\n    <body>\n    <table border=\"0\" cellspacing=\"8\">\n    <% for(let file of data){ %>\n    <tr>\n        <td><a href=\"{{file.url}}\">{{file.name}}</a></td>\n        <td align=\"right\">{{file.size}} B</td>\n    </tr>\n    <% } %>\n    </body>\n</html>\n";
+var file_1 = require("./file");
+var commander = require("commander");
+var TPL_FILELIST = "\n<html>\n    <head></head>\n    <body>\n    <table border=\"0\" cellspacing=\"8\">\n    <% for(let file of data){ %>\n    <tr>\n        <td><a href=\"{{file.name}}\">{{file.name}}</a></td>\n    </tr>\n    <% } %>\n    </body>\n</html>\n";
 var Httpd = /** @class */ (function () {
     function Httpd(root, port) {
         if (root === void 0) { root = "."; }
@@ -60,18 +62,14 @@ var Httpd = /** @class */ (function () {
                 fileStream.pipe(res);
             }
         }).listen(this.port);
-        console.log("starting  ", this.root, this.port);
+        console.log("httpd starting  ", this.root, this.port);
     };
     Httpd.prototype.genFilelistDatas = function (dir) {
         var datas = [];
-        var files = fs.readdirSync(dir);
+        var files = file_1.GetFileList(dir);
         for (var _i = 0, files_1 = files; _i < files_1.length; _i++) {
-            var name = files_1[_i];
-            var url_1 = path.join(dir, name);
-            var fi = fs.statSync(url_1);
-            if (fi.isFile() || fi.isDirectory()) {
-                datas.push({ name: name, url: url_1, size: fi.size });
-            }
+            var file = files_1[_i];
+            datas.push({ name: file });
         }
         return datas;
     };
@@ -79,14 +77,11 @@ var Httpd = /** @class */ (function () {
 }());
 exports.Httpd = Httpd;
 function main() {
-    var argv = process.argv;
-    var dir = ".";
-    var port = 80;
-    if (argv.length > 2)
-        dir = argv[2];
-    if (argv.length > 3)
-        port = parseInt(argv[3]);
-    new Httpd(dir, port).Start();
+    var args = commander
+        .option('-r, --root [v]', 'http root directory', '.')
+        .option('-p, --port [n]', 'http server\'s port', 80)
+        .parse(process.argv);
+    new Httpd(args.root, args.port).Start();
 }
 function test() {
     new Httpd().Start();

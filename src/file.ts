@@ -1,4 +1,28 @@
 import fs from 'fs';
+import * as path from 'path';
+
+
+export function GetFileList(dir:string):string[]{
+        let filelist:string[] = [];
+        let files = fs.readdirSync(dir)
+        for (let name of files) {
+            let fullname = path.join(dir, name);
+            let fi;
+            try{
+                fi = fs.statSync(fullname);
+            }catch{
+                continue;
+            }
+            if (fi.isFile() || fi.isDirectory()) {
+                let url = name;
+                if(fi.isDirectory())
+                    url += "/"
+                filelist.push(url);
+            }
+        }
+        return filelist;
+}
+
 
 export function ReadDir(path:string):{is_dir:boolean,name:string,subs:any[]}{
     let info = {is_dir:true,name:path,subs:[]};

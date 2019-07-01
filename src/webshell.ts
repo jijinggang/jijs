@@ -7,6 +7,8 @@ import * as fs from 'fs';
 import { JTpl } from './tpl';
 import { Shell } from "./shell"
 import * as ws from "ws";
+import {GetFileList} from './file'
+import commander = require('commander')
 
 
 const TPL_FILELIST = `
@@ -149,6 +151,7 @@ export class HttpShell {
         });
         console.log("starting  ", this.root, this.port);
 
+        const root = this.root;
         const wsServer = new ws.Server({ noServer: true });
         httpServer.on('upgrade', (request, socket, head) => {
             const URL = url.parse(request.url, true);
@@ -162,7 +165,7 @@ export class HttpShell {
                     ws1.on('message', (msg) => {
                         console.log("on_ws_msg", msg);
                     });
-                    runShell(file, ws1);
+                    runShell(root + file, ws1);
 
                 });
             }
@@ -172,20 +175,14 @@ export class HttpShell {
     }
     private genFilelistDatas(dir: string) {
         let datas: object[] = [];
-        let files = fs.readdirSync(dir)
+        let files = GetFileList(dir);
         for (let name of files) {
-            let url = path.join(dir, name);
-            let fi = fs.statSync(url);
-            if (fi.isFile() || fi.isDirectory()) {
-                if (fi.isFile) {
-                    let ext = path.extname(url).split(".")[1];
-                    if (this.exts.indexOf(ext) < 0) {
-                        console.log(`skip:${url}`)
-                        continue;
-                    }
-                }
-                datas.push({ name: name, url: url, size: fi.size });
+            let ext = path.extname(name).split(".")[1];
+            if (this.exts.indexOf(ext) < 0) {
+                console.log(`skip:${name}`)
+                continue;
             }
+            datas.push({ name: name });
         }
         return datas;
     }
@@ -193,23 +190,19 @@ export class HttpShell {
 
 }
 
-function main() {
-    console.log("Useage: node myjs.httpshell.js . 80 cmd/bat/sh")
-    let argv = process.argv;
-    let dir = ".";
-    let port = 80;
-    let exts: string[] = ["cmd", "bat", "sh"]
-    if (argv.length > 2)
-        dir = argv[2];
-    if (argv.length > 3)
-        port = parseInt(argv[3]);
-    if (argv.length > 4)
-        exts = argv[4].split('/')
-    new HttpShell(dir, port, exts).Start();
+function main(){
+    let args = commander
+        .option('-r, --root [v]','shell files\' root directory','.')
+        .option('-p, --port [n]','http server\'s port', 80)
+        .option('-e, --ext [v]','file extension which includes', 'cmd/bat/sh')
+        .parse(process.argv)
+    //console.log(args)
+    let exts = args.ext.split('/')
+    new HttpShell(args.root, args.port, exts).Start();
 }
 
 function test() {
-    new HttpShell(".", 80, ["cmd", "bat", "sh"]).Start();
+    new HttpShell("d:/", 80, ["cmd", "bat", "sh"]).Start();
 }
 
 //test();
